@@ -582,6 +582,7 @@ export class IntersectionTypesRegistry {
   public flushHelperTypes(code: CodeMaker) {
     for (const [name, types] of this.types.entries()) {
       code.line('');
+      code.line('@typing.runtime_checkable');
       code.line(
         `class ${name}(${types.join(', ')}, typing_extensions.Protocol):`,
       );

@@ -1116,6 +1116,7 @@ class Interface extends BasePythonClassType {
     this.sortBasesForMro();
 
     context = nestedContext(context, this.fqn);
+    code.line('@typing.runtime_checkable');
     emitList(code, '@jsii.interface(', [`jsii_type="${this.fqn}"`], ')');
 
     // First we do our normal class logic for emitting our members.
@@ -2258,10 +2259,10 @@ class Package {
     );
     code.closeFile('README.md');
 
-    // 3.x and newer perform an additional runtime check on interfaces that our interfaces fail.
-    // Stick to this old version. <https://github.com/aws/constructs/issues/2825>
+    // With @runtime_checkable decorator on Protocol interfaces, typeguard 3.x and 4.x
+    // are now supported alongside 2.x.
     // Defined as a constant to hopefully prevent Dependabot from automatically updating this.
-    const typeguardVersion = '2.13.3';
+    const typeguardVersion = '>=2.13.3,<5.0';
 
     const setupKwargs = {
       name: this.name,
@@ -2288,7 +2289,7 @@ class Package {
       install_requires: [
         `jsii${toPythonVersionRange(`^${VERSION}`)}`,
         'publication>=0.0.3',
-        `typeguard==${typeguardVersion}`,
+        `typeguard${typeguardVersion}`,
       ]
         .concat(dependencies)
         .sort(),
