@@ -2258,10 +2258,10 @@ class Package {
     );
     code.closeFile('README.md');
 
-    // typeguard 3.x and 4.x are now supported. The code generator and runtime handle version
-    // differences with runtime version detection.
+    // 3.x and newer perform an additional runtime check on interfaces that our interfaces fail.
+    // Stick to this old version. <https://github.com/aws/constructs/issues/2825>
     // Defined as a constant to hopefully prevent Dependabot from automatically updating this.
-    const typeguardVersion = '>=2.13.3,<5.0';
+    const typeguardVersion = '2.13.3';
 
     const setupKwargs = {
       name: this.name,
@@ -2288,7 +2288,7 @@ class Package {
       install_requires: [
         `jsii${toPythonVersionRange(`^${VERSION}`)}`,
         'publication>=0.0.3',
-        `typeguard${typeguardVersion}`,
+        `typeguard==${typeguardVersion}`,
       ]
         .concat(dependencies)
         .sort(),
